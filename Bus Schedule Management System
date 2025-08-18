@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct History {
+    char bus[10];
+    struct History *next;
+} *head=NULL;
+
+void addHistory(char*b) {
+    struct History *n=malloc(sizeof(struct History));
+    strcpy(n->bus,b);
+    n->next=head;
+    head=n;
+}
+
+void showHistory(){
+    struct History *t=head;
+    printf("Bus History:");
+    while(t){ printf("%s",t->bus);t=t->next;}
+    printf("\n");
+}
+
+char queue[10][10];
+int f=-1,r=-1;
+
+void enqueue(char *b) { 
+    r++; 
+    strcpy(queue[r],b); 
+    if(f==-1)f=0; 
+    printf("Bus %s arrived\n",b);
+}
+
+void dequeue() { 
+    if(f>r || f==-1){ printf("Queue empty\n"); return; } 
+    printf("Bus %s departed\n", queue[f++]); 
+}
+
+int stack[10], top=-1;
+
+void push(int p){ stack[++top]=p; }
+int total(){ 
+    int s=0; 
+    for(int i=0;i<=top;i++) s+=stack[i]; 
+    return s; 
+}
+
+int main(){
+    int ch,p;
+    char b[10];
+    while(1){
+        printf("\n1.Arrive 2.Depart 3.Add Passenger 4.Total 5.Track 6.Quit\nSelect: ");
+        scanf("%d",&ch);
+        switch(ch){
+            case 1:scanf("%s",b);enqueue(b);addHistory(b);break;
+            case 2:dequeue(); break;
+            case 3:scanf("%d",&p);push(p);break;
+            case 4:printf("Total passengers: %d\n",total()); break;
+            case 5:showHistory();break;
+            case 6:exit(0);
+            default:printf("Invalid\n");
+        }
+    }
+}
